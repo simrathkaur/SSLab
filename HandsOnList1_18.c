@@ -3,63 +3,43 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <fcntl.h>
-
-#define NUM_RECORDS 3
-#define RECORD_SIZE 64
-
-int file_fd;
-pthread_mutex_t file_mutex;
-pthread_rwlock_t record_locks[NUM_RECORDS];
-
-void init() {
-    file_fd = open("employee_record.txt", O_RDWR | O_CREAT, 0666);
-    if (file_fd == -1) {
-        perror("Error opening file");
-        exit(1);
-    }
-
-    for (int i = 0; i < NUM_RECORDS; i++) {
-        pthread_rwlock_init(&record_locks[i], NULL);
-    }
-    
-    pthread_mutex_init(&file_mutex, NULL);
-}
-void cleanup() {
-    close(file_fd);
-    for (int i = 0; i < NUM_RECORDS; i++) {
-        pthread_rwlock_destroy(&record_locks[i]);
-    }
-    pthread_mutex_destroy(&file_mutex);
-}
-
-void read_record(int record_id, char *buffer) {
-    pthread_rwlock_rdlock(&record_locks[record_id]);
-    lseek(file_fd, record_id * RECORD_SIZE, SEEK_SET);
-    read(file_fd, buffer, RECORD_SIZE);
-    pthread_rwlock_unlock(&record_locks[record_id]);
-}
-
-void write_record(int record_id, const char *data) {
-    pthread_rwlock_wrlock(&record_locks[record_id]);
-    lseek(file_fd, record_id * RECORD_SIZE, SEEK_SET);
-    write(file_fd, data, RECORD_SIZE);
-    pthread_rwlock_unlock(&record_locks[record_id]);
-}
-
+struct {
+int train_num;
+int ticket_count;
+} db;
 int main() {
-    init();
-
-    // Example usage
-    char buffer[RECORD_SIZE];
-
-    // Read record 1
-    read_record(1, buffer);
-    printf("Record 1 content: %s\n", buffer);
-
-    // Write to record 1
-    const char *newData = "New data for record 1";
-    write_record(1, newData);
-
-    cleanup();
-    return 0;
+int fd, input;
+fd = open("record.txt", O_RDWR);
+printf("Select train number: 1, 2, 3\n");
+scanf("%d", &input);
+struct flock lock;
+lock.l_type = F_WRLCK;lock.l_whence = SEEK_SET;
+// Record for train number 1 is stored at the beginning of the file so at offset = 0
+// For train number 2, it is stored at offset = sizeof(db)
+// For train number 3, it is stored at offset = 2 * sizeof(db)
+// And that is essentially what this next line does
+lock.l_start = (input - 1) * sizeof(db);
+// This actually implements record-level locking
+// We start locking from the beginning of selected train's record upto the end of that record which will be at l_start + sizeof(db)
+lock.l_len = sizeof(db);
+lock.l_pid = getpid();
+// Reading value of ticket number
+lseek(fd, (input - 1) * sizeof(db), SEEK_SET);
+read(fd, &db, sizeof(db));
+printf("Before entering critical section\n");
+fcntl(fd, F_SETLKW, &lock);
+printf("Current ticket count: %d", db.ticket_count);
+db.ticket_count++;
+// Currently fd is pointing to end of current record and we have tomove it to the start of current record, i.e. SEEK_CUR - sizeof(db)
+// Or you can just do SEEK_SET + (input - 1) * sizeof(db)
+lseek(fd, -1 * sizeof(db), SEEK_CUR);
+write(fd, &db, sizeof(db));
+printf("To book ticket, press enter\n");
+getchar();
+// First getchar() call will be bypassed by train number input onSTDIN, so that's why we add another getchar() call here
+getchar();
+lock.l_type = F_UNLCK;
+fcntl(fd, F_SETLK, &lock);
+printf("Ticket booked with number %d\n", db.ticket_count);
 }
+
