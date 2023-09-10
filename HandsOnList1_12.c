@@ -2,10 +2,8 @@
 #include<fcntl.h>
 #include<unistd.h>
 int main() {
-FILE *file = fopen("sample.txt", "r");
-int fd = fileno(file);
+int fd = open("sample1.txt",O_RDONLY);
 int mode = fcntl(fd, F_GETFL);
-//printf("%d",mode);
 switch(mode){
     case 32768 : printf("r"); break;
     case 32769 : printf("w"); break;

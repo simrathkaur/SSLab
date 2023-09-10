@@ -12,6 +12,7 @@ int main(int argc,char *argv[]){
 	int fd_write=open(argv[2],O_WRONLY |O_CREAT);
 	if(fd_read==-1 || fd_write ==-1){
 		printf("\nCould not open file.");
+		return 0;
 	}
 	while(1){
 		char buff;

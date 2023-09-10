@@ -5,35 +5,17 @@
 #include<sys/types.h>
 #include<sys/stat.h>
 #include<stdlib.h>
-struct{
-	int train_num;
-	int ticket_count;
-}db;
-int main(){
-	int fd,input;
-	fd=open("record17.txt",O_RDWR);
-	printf("Select train number(1,2,3) : \n");
-	scanf("%d",&input);
-	struct flock lock;
-	lock.l_type=F_WRLCK;
-	lock.l_whence=SEEK_SET;
-	lock.l_start=(input-1)*sizeof(db);
-	lock.l_len=sizeof(db);
-	lock.l_pid=getpid();
-
-	lseek(fd,(input-1)*sizeof(db), SEEK_SET);
-	read(fd,&db,sizeof(db));
-	printf("before entering the critical section \n");
-
-	fcntl(fd,F_SETLKW,&lock);
-	printf("ticket number: %d \n",db.ticket_count);
-	db.ticket_count++;
-	lseek(fd,-1*sizeof(db),SEEK_CUR);
-	write(fd,&db,sizeof(db));// updating db with new ticket number
-	printf("to book ticket, press enter: \n");
-	getchar();
-	getchar();
-	lock.l_type=F_UNLCK;
-	fcntl(fd,F_SETLK,&lock);
-	printf("Booked \n");
+int main() {
+	int fd;
+	struct {
+		int ticket_no;
+	} db;
+	db.ticket_no = 10;
+	fd = open("db", O_CREAT|O_RDWR, 0744);
+	write(fd, &db, sizeof(db));
+	close(fd);
+	fd = open("db", O_RDONLY);
+	read(fd, &db, sizeof(db));
+	printf("Ticket no: %d\n", db.ticket_no);
+	close(fd);
 }

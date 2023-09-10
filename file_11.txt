@@ -1,0 +1,4 @@
+Appended using original descriptor.
+Appended using dup descriptor.
+Appended using dup2 descriptor.
+Appended using fcntl descriptor.
