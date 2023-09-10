@@ -1,3 +1,11 @@
+/*
+============================================================================
+Name : Handson List 1- ques 8
+Author : Simrath Kaur
+Description : Write a program to open a file in read only mode, read line by line and display each line as it is read.
+Close the file when end of file is reached.
+============================================================================
+*/  
 #include<unistd.h>
 #include<stdio.h>
 

@@ -1,3 +1,12 @@
+/*
+============================================================================
+Name : Handson List 1- ques 16a
+Author : Simrath Kaur
+Description : Write a program to perform mandatory locking.
+a. Implement write lock
+b. Implement read lock
+============================================================================
+*/  
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>

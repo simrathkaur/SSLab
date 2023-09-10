@@ -1,3 +1,10 @@
+/*
+============================================================================
+Name : Handson List 1- ques 20
+Author : Simrath Kaur
+Description : Find out the priority of your running program. Modify the priority with nice command.
+============================================================================
+*/  
 #include <unistd.h>
 #include <sched.h>
 #include <stdlib.h>

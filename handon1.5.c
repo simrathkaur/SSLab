@@ -1,4 +1,11 @@
-#include<stdio.h>
+/*
+============================================================================
+Name : Handson List 1- ques 5
+Author : Simrath Kaur
+Description : Write a program to create five new files with infinite loop. Execute the program in the background
+and check the file descriptor table at /proc/pid/fd.
+============================================================================
+*/  #include<stdio.h>
 #include<unistd.h>
 #include<fcntl.h>
 int main(){

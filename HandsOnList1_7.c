@@ -1,3 +1,10 @@
+/*
+============================================================================
+Name : Handson List 1- ques 7
+Author : Simrath Kaur
+Description : Write a program to copy file1 into file2 ($cp file1 file2).
+============================================================================
+*/  
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>

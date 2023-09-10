@@ -1,3 +1,10 @@
+/*
+============================================================================
+Name : Handson List 1- ques 12
+Author : Simrath Kaur
+Description : Write a program to find out the opening mode of a file. Use fcntl.
+============================================================================
+*/  
 #include<stdio.h>
 #include<fcntl.h>
 #include<unistd.h>

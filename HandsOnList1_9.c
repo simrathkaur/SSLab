@@ -1,3 +1,20 @@
+/*
+============================================================================
+Name : Handson List 1- ques 9
+Author : Simrath Kaur
+Description : Write a program to print the following information about a given file.
+a. inode
+b. number of hard links
+c. uid
+d. gid
+e. size
+f. block size
+g. number of blocks
+h. time of last access
+i. time of last modification
+j. time of last change
+============================================================================
+*/  
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>

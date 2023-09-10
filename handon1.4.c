@@ -1,4 +1,10 @@
-#include<fcntl.h>
+/*
+============================================================================
+Name : Handson List 1- ques 4
+Author : Simrath Kaur
+Description : Write a program to open an existing file with read write mode. Try O_EXCL flag also.
+============================================================================
+*/  #include<fcntl.h>
 #include<stdio.h>
 #include<unistd.h>
 int main(){

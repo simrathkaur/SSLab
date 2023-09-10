@@ -1,3 +1,10 @@
+/*
+============================================================================
+Name : Handson List 1- ques 24
+Author : Simrath Kaur
+Description : Write a program to create an orphan process.
+============================================================================
+*/  
 #include<stdio.h>
 #include <sys/types.h>
 #include <unistd.h>

@@ -1,3 +1,11 @@
+/*
+============================================================================
+Name : Handson List 1- ques 29
+Author : Simrath Kaur
+Description : Write a program to get scheduling policy and modify the scheduling policy (SCHED_FIFO,
+SCHED_RR).
+============================================================================
+*/  
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -5,13 +13,14 @@
 
 int main() {
     int policy;
-   
+    struct sched_param param;
+
+    // Get the current scheduling policy and parameters
     int pid = getpid();
     if ((policy = sched_getscheduler(pid)) == -1) {
         perror("sched_getscheduler");
         return 1;
     }
-
     printf("Current scheduling policy: ");
     switch (policy) {
         case SCHED_FIFO:
@@ -27,8 +36,6 @@ int main() {
             printf("Unknown\n");
             break;
     }
-
-    // Modify the scheduling policy to SCHED_FIFO
     struct sched_param new_param;
     new_param.sched_priority = 99;
 
@@ -36,8 +43,9 @@ int main() {
         perror("sched_setscheduler");
         return 1;
     }
-
     printf("\nSetting scheduling policy to SCHED_FIFO...\n");
+
+    // Get the new scheduling policy and parameters
     if ((policy = sched_getscheduler(pid)) == -1) {
         perror("sched_getscheduler");
         return 1;
@@ -58,8 +66,5 @@ int main() {
             printf("Unknown\n");
             break;
     }
-
-
     return 0;
 }
-
